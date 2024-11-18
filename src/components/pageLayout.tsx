@@ -11,6 +11,10 @@ const Layout = styled.div`
   width: 100vw;
   flex-direction: row;
   flex-wrap: wrap;
+
+  @media (max-width: 1000px) {
+    flex-direction: column-reverseyarn;
+  }
 `;
 
 const ControlArea = styled.div`
@@ -18,11 +22,15 @@ const ControlArea = styled.div`
   flex-basis: 200px;
   flex-grow: 1;
   flex-direction: column;
-  height: 100%;
+  height: 100vh;
   width: 100%;
   min-width: 300px;
   overflow: hidden;
   overflow-y: auto;
+
+  @media (max-width: 1000px) {
+    flex-basis: initial;
+  }
 `;
 
 const ViewArea = styled.div`

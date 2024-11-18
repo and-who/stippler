@@ -75,16 +75,24 @@ Error generating stack: `+l.message+`
   width: 100vw;
   flex-direction: row;
   flex-wrap: wrap;
+
+  @media (max-width: 1000px) {
+    flex-direction: column-reverseyarn;
+  }
 `,e_=Ye.div`
   display: flex;
   flex-basis: 200px;
   flex-grow: 1;
   flex-direction: column;
-  height: 100%;
+  height: 100vh;
   width: 100%;
   min-width: 300px;
   overflow: hidden;
   overflow-y: auto;
+
+  @media (max-width: 1000px) {
+    flex-basis: initial;
+  }
 `,t_=Ye.div`
   display: flex;
   flex-basis: 600px;
