@@ -1,8 +1,10 @@
 import React, { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
+import Container from "./container";
 
 interface ImageEditorProps {
   image?: HTMLImageElement;
+  color: string;
   onImageChange: (data: {
     width: number;
     height: number;
@@ -18,10 +20,10 @@ const Layout = styled.div`
 
 const CanvasWrapper = styled.div`
   display: flex;
+  height: 33vh;
   width: 100%;
-  height: 600px;
-  flex-direction: column;
-  flex-grow: 1;
+  align-items: center;
+  justify-content: center;
 
   canvas {
     max-width: 100%;
@@ -31,50 +33,94 @@ const CanvasWrapper = styled.div`
 
 const ImageEditor: React.FC<ImageEditorProps> = ({ image, onImageChange }) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const [colorOffset, setColorOffset] = useState(0);
+  const [brightness, setBrightness] = useState(100);
+  const [contrast, setContrast] = useState(50);
+  const [invert, setInvert] = useState(false);
+
+  const imageBaseSize = 1000;
+  const aspectRatio = image ? image.width / image.height : 1;
+  const scaledWidth = imageBaseSize * aspectRatio;
+  const scaledHeight = imageBaseSize;
 
   useEffect(() => {
     const canvas = canvasRef.current;
     if (canvas && image) {
       const context = canvas.getContext("2d");
       if (context) {
-        canvas.width = image.width;
-        canvas.height = image.height;
-        context.drawImage(image, 0, 0, image.width, image.height);
+        canvas.width = scaledWidth;
+        canvas.height = scaledHeight;
+        context.filter = `brightness(${brightness}%) contrast(${contrast}%) invert(${
+          invert ? "100%" : "0%"
+        })`;
+        context.drawImage(image, 0, 0, scaledWidth, scaledHeight);
+
         var imageData = context.getImageData(0, 0, canvas.width, canvas.height);
+
+        // const rgbColor = getRGB(color);
+        // const rMult = rgbColor.r / 255;
+        // const gMult = rgbColor.g / 255;
+        // const bMult = rgbColor.b / 255;
+
         const data = imageData.data;
         for (let i = 0; i < data.length; i += 4) {
           const avg = (data[i] + data[i + 1] + data[i + 2]) / 3;
-          const colorOffsetAVG = Math.min(255, Math.max(0, avg + colorOffset));
-          data[i] = colorOffsetAVG; // red
-          data[i + 1] = colorOffsetAVG; // green
-          data[i + 2] = colorOffsetAVG; // blue
+          let alpha = Math.max(255 - avg * 1.2, 0);
+
+          // data[i] = Math.min(avg * rMult, 255); // red
+          // data[i + 1] = Math.min(avg * gMult, 255); // green
+          // data[i + 2] = Math.min(avg * bMult, 255); // blue
+          data[i + 3] = Math.min(alpha, 255); // alpha
         }
+
         context.putImageData(imageData, 0, 0);
         onImageChange({
           width: canvas.width,
           height: canvas.height,
-          imageData,
+          imageData: imageData,
         });
       }
     }
-  }, [image, colorOffset]);
+  }, [image, brightness, contrast, invert]);
 
   return (
-    <Layout>
-      <input
-        type="range"
-        max={255}
-        min={-255}
-        value={colorOffset}
-        onChange={(event) => setColorOffset(Number(event.target.value))}
-      />
-      <label>Color Offset</label>
+    <Container>
+      <Layout>
+        <div>
+          <label>Brigthness:</label>
+          <input
+            type="range"
+            min={1}
+            max={500}
+            value={brightness}
+            onChange={(event) => setBrightness(Number(event.target.value))}
+          />
+        </div>
+        <div>
+          <label>Contrast:</label>
+          <input
+            type="range"
+            min={0}
+            max={100}
+            value={contrast}
+            onChange={(event) => setContrast(Number(event.target.value))}
+          />
+        </div>
+        <div>
+          <label>Invert:</label>
+          <input
+            type="checkbox"
+            onChange={(event) => {
+              console.log(event.target.checked);
+              setInvert(event.target.checked);
+            }}
+          />
+        </div>
 
-      <CanvasWrapper>
-        <canvas ref={canvasRef}></canvas>
-      </CanvasWrapper>
-    </Layout>
+        <CanvasWrapper>
+          <canvas ref={canvasRef}></canvas>
+        </CanvasWrapper>
+      </Layout>
+    </Container>
   );
 };
 

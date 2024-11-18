@@ -1,4 +1,5 @@
 import React, { useEffect } from "react";
+import Container from "./container";
 
 interface ImageLoaderProps {
   initImageSource?: string;
@@ -32,9 +33,9 @@ const ImageLoader = (props: ImageLoaderProps) => {
   }, []);
 
   return (
-    <div>
+    <Container>
       <input type="file" accept="image/*" onChange={handleImageChange} />
-    </div>
+    </Container>
   );
 };
 

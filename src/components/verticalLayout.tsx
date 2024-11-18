@@ -12,16 +12,13 @@ const Layout = styled.div`
   flex-direction: column;
 
   > * {
-    flex-grow: 1;
-    background-color: teal;
+    flex-grow: 0;
   }
   > *:first-child {
     flex-grow: 0;
-    background-color: beige;
   }
   > *:last-child {
     flex-grow: 0;
-    background-color: darkkhaki;
   }
 `;
 

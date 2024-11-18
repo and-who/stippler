@@ -1,9 +1,8 @@
 import { useEffect, useRef, useState } from "react";
 import "./App.css";
-import { relaxPoints } from "./utils/stippler";
+import { generateRandomPoints, relaxPoints } from "./utils/stippler";
 import ImageLoader from "./components/imageLoader";
 import PointRenderer from "./components/pointRenderer";
-import Container from "./components/container";
 import PageLayout from "./components/pageLayout";
 import ImageEditor from "./components/imageEditor";
 import * as THREE from "three";
@@ -17,28 +16,53 @@ function App() {
   const [imageData, setImageData] = useState<ImageData>();
   const [count, setCount] = useState<number>(0);
 
+  const cycleLimitRef = useRef<number>();
+  const countRef = useRef<number>(0);
+  const pointsCountRef = useRef<number>();
   const imageDataRef = useRef<ImageData>();
   const pointsRef = useRef<THREE.Vector2[]>();
   const requestRef = useRef<number>();
 
-  const [dotColor, setDotColor] = useState("#FFC0CB");
-  const [bgColor, setBGDotColor] = useState("#FFC0CB");
-  const [dotSize, setDotSize] = useState(3);
+  const [dotColor, setDotColor] = useState<string>("#FFC0CB");
+  const [bgColor, setBGDotColor] = useState<string>("#FFC0CB");
+  const [dotSize, setDotSize] = useState<number>(3);
   const renderCycleActiveRef = useRef<boolean>(true);
 
   const recalculate = () => {
-    if (imageDataRef.current) {
+    if (imageDataRef.current && pointsCountRef.current) {
+      let points = pointsRef.current;
+      if (
+        points &&
+        (points.length === 0 || points.length !== pointsCountRef.current)
+      ) {
+        if (points.length > pointsCountRef.current) {
+          points = points.slice(0, pointsCountRef.current);
+        } else {
+          const newPointsCount = pointsCountRef.current - points.length;
+          points = [
+            ...points,
+            ...generateRandomPoints(imageDataRef.current, newPointsCount),
+          ];
+        }
+        pointsRef.current = points;
+      }
+
       const relaxedPoints = relaxPoints(
         imageDataRef.current,
         pointsRef.current || []
       );
       pointsRef.current = relaxedPoints;
-      setCount((count) => count + 1);
+      countRef.current++;
+      setCount(countRef.current);
     }
   };
 
   const animate = () => {
-    if (renderCycleActiveRef.current) {
+    if (
+      renderCycleActiveRef.current &&
+      cycleLimitRef.current &&
+      countRef.current < cycleLimitRef.current
+    ) {
       recalculate();
     }
     requestRef.current = requestAnimationFrame(animate);
@@ -53,8 +77,15 @@ function App() {
 
   useEffect(() => {
     imageDataRef.current = imageData;
-    pointsRef.current = [];
-    setCount(0);
+    if (imageData && pointsCountRef.current) {
+      pointsRef.current = generateRandomPoints(
+        imageData,
+        pointsCountRef.current
+      );
+    } else {
+      pointsRef.current = [];
+    }
+    countRef.current = 0;
     recalculate();
   }, [imageData]);
 
@@ -68,6 +99,7 @@ function App() {
           }}
         />
         <ImageEditor
+          color={dotColor}
           image={image}
           onImageChange={(imageData) => {
             setImageData(imageData.imageData);
@@ -83,6 +115,13 @@ function App() {
           onRenderCycleChange={(active) =>
             (renderCycleActiveRef.current = active)
           }
+          onCycleLimitChange={(cycleLimit) => {
+            cycleLimitRef.current = cycleLimit;
+          }}
+          onDotCountChange={(dotCount) => {
+            countRef.current = 0;
+            pointsCountRef.current = dotCount;
+          }}
         />
       </VerticalLayout>
     </>
@@ -90,17 +129,15 @@ function App() {
 
   const viewArea = (
     <>
-      <Container>
-        {pointsRef.current && imageDataRef.current && (
-          <PointRenderer
-            points={pointsRef.current}
-            dotColor={dotColor}
-            dotSize={dotSize}
-            width={imageDataRef.current.width}
-            height={imageDataRef.current.height}
-          />
-        )}
-      </Container>
+      {pointsRef.current && imageDataRef.current && (
+        <PointRenderer
+          points={pointsRef.current}
+          dotColor={dotColor}
+          dotSize={dotSize}
+          width={imageDataRef.current.width}
+          height={imageDataRef.current.height}
+        />
+      )}
     </>
   );
   return (

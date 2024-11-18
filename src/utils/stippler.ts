@@ -11,7 +11,7 @@ const brightness = (col: number[]) => {
   return (col[0] + col[1] + col[2]) / 3;
 };
 
-const generateRandomPoints = (imageData: ImageData, n: number) => {
+export const generateRandomPoints = (imageData: ImageData, n: number) => {
   const points: THREE.Vector2[] = [];
   for (let i = 0; i < n; i++) {
     let x = Math.floor(Math.random() * imageData.width);
@@ -50,17 +50,6 @@ const recalculatePoints = (imageData: ImageData, points: THREE.Vector2[]) => {
       let bright = brightness(pixelData);
       let weight = 1 - bright / 255;
       delaunayIndex = delaunay.find(i, j, delaunayIndex);
-      //   console.log("Weigth for Pixel", {
-      //     i,
-      //     j,
-      //     bright,
-      //     weight,
-      //     delaunayIndex,
-      //     centroids,
-      //     weights,
-      //     cells,
-      //     delaunay,
-      //   });
       centroids[delaunayIndex].x += i * weight;
       centroids[delaunayIndex].y += j * weight;
       weights[delaunayIndex] += weight;
@@ -93,12 +82,7 @@ function calculateDelaunay(points: THREE.Vector2[]) {
   return new d3.Delaunay(pointsArray);
 }
 
-export const relaxPoints = (imageData: ImageData, points?: THREE.Vector2[]) => {
-  console.log("Relaxing points");
-  let stressedPoints = points;
-  if (!stressedPoints || stressedPoints.length === 0) {
-    stressedPoints = generateRandomPoints(imageData, 20000);
-  }
-  const relaxedPoints = recalculatePoints(imageData, stressedPoints);
+export const relaxPoints = (imageData: ImageData, points: THREE.Vector2[]) => {
+  const relaxedPoints = recalculatePoints(imageData, points);
   return relaxedPoints;
 };

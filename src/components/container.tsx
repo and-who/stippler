@@ -7,8 +7,10 @@ interface ContainerProps {
 }
 
 const Layout = styled.div`
-  height: 100%;
-  width: 100%;
+  margin: 5px;
+  padding: 5px;
+
+  border: 1px dotted var(--color);
 `;
 
 const Container: React.FC<ContainerProps> = ({ title, children }) => {

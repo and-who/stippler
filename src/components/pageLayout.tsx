@@ -23,6 +23,7 @@ const ControlArea = styled.div`
   width: 100%;
   min-width: 300px;
   overflow: hidden;
+  overflow-y: auto;
 `;
 
 const ViewArea = styled.div`

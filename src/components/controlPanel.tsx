@@ -1,11 +1,15 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
+import Container from "./container";
+import { invertColor } from "../utils/utils";
 
 interface ControlPanelProps {
   cycleCount: number;
   onDotColorChange: (colors: { color: string; bgColor: string }) => void;
   onDotSizeChange: (size: number) => void;
   onRenderCycleChange: (active: boolean) => void;
+  onCycleLimitChange: (cycleLimit: number) => void;
+  onDotCountChange: (dotCount: number) => void;
 }
 
 const Layout = styled.div`
@@ -14,40 +18,19 @@ const Layout = styled.div`
   flex-direction: column;
 `;
 
-const invertColor = (hex: string) => {
-  if (hex.indexOf("#") === 0) {
-    hex = hex.slice(1);
-  }
-  // convert 3-digit hex to 6-digits.
-  if (hex.length === 3) {
-    hex = hex[0] + hex[0] + hex[1] + hex[1] + hex[2] + hex[2];
-  }
-  if (hex.length !== 6) {
-    throw new Error("Invalid HEX color.");
-  }
-  // invert color components
-  var r = (255 - parseInt(hex.slice(0, 2), 16)).toString(16),
-    g = (255 - parseInt(hex.slice(2, 4), 16)).toString(16),
-    b = (255 - parseInt(hex.slice(4, 6), 16)).toString(16);
-  // pad each with zeros and return
-  return "#" + padZero(r) + padZero(g) + padZero(b);
-};
-
-const padZero = (str: string, len?: number) => {
-  len = len || 2;
-  var zeros = new Array(len).join("0");
-  return (zeros + str).slice(-len);
-};
-
 const ControlPanel: React.FC<ControlPanelProps> = ({
   cycleCount,
   onDotColorChange,
   onDotSizeChange,
   onRenderCycleChange,
+  onCycleLimitChange,
+  onDotCountChange,
 }) => {
   const [dotColor, setDotColor] = useState("#FFC0CB");
   const [dotSize, setDotSize] = useState(3);
+  const [cycleLimit, setCycleLimit] = useState(500);
   const [renderCycleActive, setRenderCycleActive] = useState(true);
+  const [dotCount, setDotCount] = useState(20000);
 
   const handleDotColorChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const color = e.target.value;
@@ -62,47 +45,83 @@ const ControlPanel: React.FC<ControlPanelProps> = ({
     onDotSizeChange(dotSize);
   };
 
-  const handleRenderCycleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const active = e.target.checked;
-    setRenderCycleActive(active);
-    onRenderCycleChange(active);
+  const toggleRenderCycle = () => {
+    onRenderCycleChange(!renderCycleActive);
+    setRenderCycleActive(!renderCycleActive);
+  };
+
+  const handleCycleLimitChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const cycleLimit = Number(e.target.value);
+    setCycleLimit(cycleLimit);
+    onCycleLimitChange(cycleLimit);
+  };
+
+  const handleDotCountChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const dotCount = Number(e.target.value);
+    onDotCountChange(dotCount);
+    setDotCount(dotCount);
   };
 
   useEffect(() => {
     onDotColorChange({ color: dotColor, bgColor: invertColor(dotColor) });
     onDotSizeChange(dotSize);
     onRenderCycleChange(renderCycleActive);
+    onCycleLimitChange(cycleLimit);
+    onDotCountChange(dotCount);
   }, []);
 
   return (
-    <Layout>
-      <div>
-        <label htmlFor="renderCycle">Activate Render Cycle: </label>
-        <input
-          type="checkbox"
-          id="renderCycle"
-          value={renderCycleActive.toString()}
-          onChange={handleRenderCycleChange}
-        />
-        <p>Cycle Count: {cycleCount}</p>
-      </div>
-      <div>
-        <label htmlFor="dotSize">Dot Size: </label>
-        <input
-          type="number"
-          id="dotSize"
-          value={dotSize}
-          onChange={handleDotSizeChange}
-        />
-        <label htmlFor="dotColor">Dot Color: </label>
-        <input
-          type="color"
-          id="dotColor"
-          value={dotColor}
-          onChange={handleDotColorChange}
-        />
-      </div>
-    </Layout>
+    <Container>
+      <Layout>
+        <div>
+          <button id="renderCycle" onClick={toggleRenderCycle}>
+            {renderCycleActive ? "Pause" : "Play"}
+          </button>
+        </div>
+        <div>
+          <div>
+            <label htmlFor="dotCount">Dot Count: </label>
+            <input
+              type="number"
+              id="dotCount"
+              value={dotCount}
+              onChange={handleDotCountChange}
+            />
+          </div>
+        </div>
+        <div>
+          <label htmlFor="cycleCount">CycleCount: </label>
+          <span id="cycleCount">{cycleCount}</span>
+        </div>
+        <div>
+          <label htmlFor="cycleLimit">CycleLimit: </label>
+          <input
+            type="number"
+            id="cycleLimit"
+            value={cycleLimit}
+            onChange={handleCycleLimitChange}
+          />
+        </div>
+        <div>
+          <label htmlFor="dotSize">Dot Size: </label>
+          <input
+            type="number"
+            id="dotSize"
+            value={dotSize}
+            onChange={handleDotSizeChange}
+          />
+        </div>
+        <div>
+          <label htmlFor="dotColor">Dot Color: </label>
+          <input
+            type="color"
+            id="dotColor"
+            value={dotColor}
+            onChange={handleDotColorChange}
+          />
+        </div>
+      </Layout>
+    </Container>
   );
 };
 
