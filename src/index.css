@@ -19,25 +19,105 @@ body {
 }
 
 h1 {
-  font-size: 3.2em;
-  line-height: 1.1;
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin: 0;
+  margin-bottom: 5px;
+}
+
+p {
+  margin: 0;
+  margin-bottom: 5px;
+}
+
+/* visited link */
+a,
+a:visited {
+  color: var(--color);
+}
+
+/* mouse over link */
+a:hover,
+a:active {
+  text-decoration: wavy underline;
 }
 
 input,
 button,
 input[type="file"]::-webkit-file-upload-button {
+  cursor: pointer;
   font-family: Courier, Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+}
+
+/* For Chrome, Safari, Opera, and Edge  */
+/* input[type="range"]::-webkit-slider-runnable-track {
+  width: 300px;
+  height: 5px;
+  background: var(--color);
+  border: none;
+} */
+
+/* For Firefox
+input[type="range"]::-moz-range-track {
+  background: var(--color);
+} */
+
+input[type="range"] {
+  -webkit-appearance: none; /* Hides the slider so that custom slider can be made */
+  width: 100%; /* Specific width is required for Firefox. */
+  background: transparent; /* Otherwise white in Chrome */
+}
+
+input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  height: 10px;
+  width: 5px;
+  background: var(--color);
+  cursor: pointer;
+  margin-top: -5px; /* You need to specify a margin in Chrome, but in Firefox and IE it is automatic */
+  box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d; /* Add cool effects to your sliders! */
+}
+/* All the same stuff for Firefox */
+input[type="range"]::-moz-range-thumb {
+  box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d;
+  height: 10px;
+  width: 5px;
+  background: var(--color);
+  cursor: pointer;
+}
+
+input[type="range"]:focus {
+  outline: none; /* Removes the blue border. You should probably do some kind of focus styling for accessibility reasons though. */
+}
+
+input[type="range"]::-webkit-slider-runnable-track {
+  width: 200px;
+  height: 10px;
+  cursor: pointer;
+  background: var(--color);
+}
+
+input[type="range"]:focus::-webkit-slider-runnable-track {
+  background: var(--color);
+}
+
+input[type="range"]::-moz-range-track {
+  width: 200px;
+  height: 8.4px;
+  cursor: pointer;
+  background: var(--color);
 }
 
 @media (prefers-color-scheme: light) {
   :root {
-    color: #213547;
-    background-color: #ffffff;
+    color: var(--color);
+    background-color: var(--bgColor);
   }
   a:hover {
     color: #747bff;
   }
   button {
-    background-color: #f9f9f9;
+    color: var(--bgColor);
+    background-color: var(--color);
   }
 }

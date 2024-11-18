@@ -13,7 +13,7 @@ const Layout = styled.div`
   flex-wrap: wrap;
 
   @media (max-width: 1000px) {
-    flex-direction: column-reverseyarn;
+    flex-direction: column-reverse;
   }
 `;
 
@@ -38,7 +38,6 @@ const ViewArea = styled.div`
   flex-basis: 600px;
   flex-grow: 3;
   flex-direction: column;
-  height: 100%;
   max-height: 100vh;
   width: 100%;
   overflow: hidden;

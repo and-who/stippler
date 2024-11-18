@@ -10,6 +10,7 @@ import ControlPanel from "./components/controlPanel";
 import VerticalLayout from "./components/verticalLayout";
 import ThemeProvider from "./components/themeProvider";
 import testJPG from "./assets/test.jpg";
+import InfoPanel from "./components/infoPanel";
 
 function App() {
   const [image, setImage] = useState<HTMLImageElement>();
@@ -57,7 +58,8 @@ function App() {
     }
   };
 
-  const animate = () => {
+  const animate = (time: DOMHighResTimeStamp) => {
+    console.log("animate", { time });
     if (
       renderCycleActiveRef.current &&
       cycleLimitRef.current &&
@@ -92,6 +94,7 @@ function App() {
   const controlArea = (
     <>
       <VerticalLayout>
+        <InfoPanel />
         <ImageLoader
           initImageSource={testJPG}
           onChange={(imageElement: HTMLImageElement) => {
