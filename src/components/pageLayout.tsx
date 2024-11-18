@@ -8,7 +8,6 @@ interface ContainerProps {
 
 const Layout = styled.div`
   display: flex;
-  height: 100vh;
   width: 100vw;
   flex-direction: row;
   flex-wrap: wrap;
@@ -32,8 +31,8 @@ const ViewArea = styled.div`
   flex-grow: 3;
   flex-direction: column;
   height: 100%;
+  max-height: 100vh;
   width: 100%;
-  min-width: 600px;
   overflow: hidden;
 `;
 

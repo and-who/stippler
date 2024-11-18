@@ -34,7 +34,7 @@ const CanvasWrapper = styled.div`
 const ImageEditor: React.FC<ImageEditorProps> = ({ image, onImageChange }) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [brightness, setBrightness] = useState(100);
-  const [contrast, setContrast] = useState(50);
+  const [contrast, setContrast] = useState(85);
   const [invert, setInvert] = useState(false);
 
   const imageBaseSize = 1000;
@@ -83,7 +83,7 @@ const ImageEditor: React.FC<ImageEditorProps> = ({ image, onImageChange }) => {
   }, [image, brightness, contrast, invert]);
 
   return (
-    <Container>
+    <Container title="Image Editor">
       <Layout>
         <div>
           <label>Brigthness:</label>

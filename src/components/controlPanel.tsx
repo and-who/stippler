@@ -16,6 +16,10 @@ const Layout = styled.div`
   display: flex;
   width: 100%;
   flex-direction: column;
+
+  button {
+    margin-left: 10px;
+  }
 `;
 
 const ControlPanel: React.FC<ControlPanelProps> = ({
@@ -28,7 +32,7 @@ const ControlPanel: React.FC<ControlPanelProps> = ({
 }) => {
   const [dotColor, setDotColor] = useState("#FFC0CB");
   const [dotSize, setDotSize] = useState(3);
-  const [cycleLimit, setCycleLimit] = useState(500);
+  const [cycleLimit, setCycleLimit] = useState(1000);
   const [renderCycleActive, setRenderCycleActive] = useState(true);
   const [dotCount, setDotCount] = useState(20000);
 
@@ -71,55 +75,73 @@ const ControlPanel: React.FC<ControlPanelProps> = ({
   }, []);
 
   return (
-    <Container>
+    <Container title="Control Panel">
       <Layout>
-        <div>
-          <button id="renderCycle" onClick={toggleRenderCycle}>
-            {renderCycleActive ? "Pause" : "Play"}
-          </button>
-        </div>
-        <div>
-          <div>
-            <label htmlFor="dotCount">Dot Count: </label>
-            <input
-              type="number"
-              id="dotCount"
-              value={dotCount}
-              onChange={handleDotCountChange}
-            />
-          </div>
-        </div>
-        <div>
-          <label htmlFor="cycleCount">CycleCount: </label>
-          <span id="cycleCount">{cycleCount}</span>
-        </div>
-        <div>
-          <label htmlFor="cycleLimit">CycleLimit: </label>
-          <input
-            type="number"
-            id="cycleLimit"
-            value={cycleLimit}
-            onChange={handleCycleLimitChange}
-          />
-        </div>
-        <div>
-          <label htmlFor="dotSize">Dot Size: </label>
-          <input
-            type="number"
-            id="dotSize"
-            value={dotSize}
-            onChange={handleDotSizeChange}
-          />
-        </div>
-        <div>
-          <label htmlFor="dotColor">Dot Color: </label>
-          <input
-            type="color"
-            id="dotColor"
-            value={dotColor}
-            onChange={handleDotColorChange}
-          />
-        </div>
+        <table>
+          <tr>
+            <td>
+              <label htmlFor="cycleCount">Cycle_Count: </label>
+            </td>
+            <td>
+              <span id="cycleCount">{cycleCount}</span>
+              <button id="renderCycle" onClick={toggleRenderCycle}>
+                {renderCycleActive ? "⏸ Pause" : "▶ Render"}
+              </button>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <label htmlFor="cycleLimit">Cycle_Limit: </label>
+            </td>
+            <td>
+              <input
+                type="number"
+                id="cycleLimit"
+                value={cycleLimit}
+                onChange={handleCycleLimitChange}
+              />
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <label htmlFor="dotCount">Dot_Count: </label>
+            </td>
+            <td>
+              <input
+                type="number"
+                id="dotCount"
+                value={dotCount}
+                onChange={handleDotCountChange}
+              />
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <label htmlFor="dotSize">Dot_Size: </label>
+            </td>
+            <td>
+              <input
+                type="number"
+                id="dotSize"
+                value={dotSize}
+                onChange={handleDotSizeChange}
+              />
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <label htmlFor="dotColor">Dot_Color: </label>
+            </td>
+            <td>
+              <input
+                type="color"
+                id="dotColor"
+                value={dotColor}
+                onChange={handleDotColorChange}
+              />
+            </td>
+          </tr>
+        </table>
       </Layout>
     </Container>
   );

@@ -6,17 +6,31 @@ interface ContainerProps {
   children: React.ReactNode;
 }
 
-const Layout = styled.div`
+const Layout = styled.div<{ $hasTitle?: boolean }>`
+  position: relative;
   margin: 5px;
-  padding: 5px;
+  padding: 15px;
+  ${(props) => props.$hasTitle && "padding-top: 30px;"}
+  ${(props) => props.$hasTitle && "margin-top: 15px;"}
+  border: 2px dotted var(--color);
+`;
 
-  border: 1px dotted var(--color);
+const TitleBox = styled.div`
+  position: absolute;
+  top: -10px;
+  left: 15px;
+
+  padding-left: 5px;
+  padding-right: 5px;
+
+  border: 2px dotted var(--color);
+  background-color: var(--bgColor);
 `;
 
 const Container: React.FC<ContainerProps> = ({ title, children }) => {
   return (
-    <Layout>
-      {title && <h1>{title}</h1>}
+    <Layout $hasTitle={!!title}>
+      {title && <TitleBox>{title}</TitleBox>}
       {children}
     </Layout>
   );

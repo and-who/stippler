@@ -12,7 +12,7 @@ interface PointRendererProps {
 
 const Layout = styled.div`
   display: flex;
-  height: 100%;
+  height: 100vh;
   width: 100%;
   align-items: center;
   justify-content: center;

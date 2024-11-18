@@ -33,7 +33,7 @@ const ImageLoader = (props: ImageLoaderProps) => {
   }, []);
 
   return (
-    <Container>
+    <Container title="File Input">
       <input type="file" accept="image/*" onChange={handleImageChange} />
     </Container>
   );
