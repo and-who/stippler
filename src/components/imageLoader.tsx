@@ -1,8 +1,10 @@
-import React from "react";
+import React, { useEffect } from "react";
 
 interface ImageLoaderProps {
+  initImageSource?: string;
   onChange: (image: HTMLImageElement) => void;
 }
+
 const ImageLoader = (props: ImageLoaderProps) => {
   const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
@@ -18,6 +20,16 @@ const ImageLoader = (props: ImageLoaderProps) => {
       reader.readAsDataURL(file);
     }
   };
+
+  useEffect(() => {
+    if (props.initImageSource) {
+      const img = new Image();
+      img.onload = () => {
+        props.onChange?.(img);
+      };
+      img.src = props.initImageSource;
+    }
+  }, []);
 
   return (
     <div>

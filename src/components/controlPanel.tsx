@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 
 interface ControlPanelProps {
@@ -47,7 +47,7 @@ const ControlPanel: React.FC<ControlPanelProps> = ({
 }) => {
   const [dotColor, setDotColor] = useState("#FFC0CB");
   const [dotSize, setDotSize] = useState(3);
-  const [renderCycleActive, setRenderCycleActive] = useState(false);
+  const [renderCycleActive, setRenderCycleActive] = useState(true);
 
   const handleDotColorChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const color = e.target.value;
@@ -67,6 +67,12 @@ const ControlPanel: React.FC<ControlPanelProps> = ({
     setRenderCycleActive(active);
     onRenderCycleChange(active);
   };
+
+  useEffect(() => {
+    onDotColorChange({ color: dotColor, bgColor: invertColor(dotColor) });
+    onDotSizeChange(dotSize);
+    onRenderCycleChange(renderCycleActive);
+  }, []);
 
   return (
     <Layout>

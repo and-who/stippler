@@ -1,4 +1,4 @@
-import React, { useRef, useEffect } from "react";
+import React, { useRef } from "react";
 import styled from "styled-components";
 import * as THREE from "three";
 
@@ -32,21 +32,19 @@ const PointRenderer: React.FC<PointRendererProps> = ({
 }) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
-  useEffect(() => {
-    const canvas = canvasRef.current;
-    if (canvas) {
-      const context = canvas.getContext("2d");
-      if (context) {
-        context.clearRect(0, 0, width, height);
-        context.fillStyle = dotColor;
-        points.forEach((point) => {
-          context.beginPath();
-          context.arc(point.x, point.y, dotSize / 2, 0, Math.PI * 2);
-          context.fill();
-        });
-      }
+  const canvas = canvasRef.current;
+  if (canvas) {
+    const context = canvas.getContext("2d");
+    if (context) {
+      context.clearRect(0, 0, width, height);
+      context.fillStyle = dotColor;
+      points.forEach((point) => {
+        context.beginPath();
+        context.arc(point.x, point.y, dotSize / 2, 0, Math.PI * 2);
+        context.fill();
+      });
     }
-  }, [points, width, height]);
+  }
 
   return (
     <Layout>

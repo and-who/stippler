@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import "./App.css";
-import useStippler, { relaxPoints } from "./hooks/useStippler";
+import { relaxPoints } from "./utils/stippler";
 import ImageLoader from "./components/imageLoader";
 import PointRenderer from "./components/pointRenderer";
 import Container from "./components/container";
@@ -9,7 +9,8 @@ import ImageEditor from "./components/imageEditor";
 import * as THREE from "three";
 import ControlPanel from "./components/controlPanel";
 import VerticalLayout from "./components/verticalLayout";
-import { color } from "d3";
+import ThemeProvider from "./components/themeProvider";
+import testJPG from "./assets/test.jpg";
 
 function App() {
   const [image, setImage] = useState<HTMLImageElement>();
@@ -21,9 +22,9 @@ function App() {
   const requestRef = useRef<number>();
 
   const [dotColor, setDotColor] = useState("#FFC0CB");
-  const [gbColor, setBGDotColor] = useState("#FFC0CB");
+  const [bgColor, setBGDotColor] = useState("#FFC0CB");
   const [dotSize, setDotSize] = useState(3);
-  const [renderCycleActive, setRenderCycleActive] = useState(false);
+  const renderCycleActiveRef = useRef<boolean>(true);
 
   const recalculate = () => {
     if (imageDataRef.current) {
@@ -32,12 +33,14 @@ function App() {
         pointsRef.current || []
       );
       pointsRef.current = relaxedPoints;
+      setCount((count) => count + 1);
     }
   };
 
   const animate = () => {
-    recalculate();
-    setCount((count) => count + 1);
+    if (renderCycleActiveRef.current) {
+      recalculate();
+    }
     requestRef.current = requestAnimationFrame(animate);
   };
 
@@ -52,12 +55,14 @@ function App() {
     imageDataRef.current = imageData;
     pointsRef.current = [];
     setCount(0);
+    recalculate();
   }, [imageData]);
 
   const controlArea = (
     <>
       <VerticalLayout>
         <ImageLoader
+          initImageSource={testJPG}
           onChange={(imageElement: HTMLImageElement) => {
             setImage(imageElement);
           }}
@@ -75,7 +80,9 @@ function App() {
             setBGDotColor(colors.bgColor);
           }}
           onDotSizeChange={(size) => setDotSize(size)}
-          onRenderCycleChange={(active) => setRenderCycleActive(active)}
+          onRenderCycleChange={(active) =>
+            (renderCycleActiveRef.current = active)
+          }
         />
       </VerticalLayout>
     </>
@@ -96,7 +103,11 @@ function App() {
       </Container>
     </>
   );
-  return <PageLayout controlElements={controlArea} viewElements={viewArea} />;
+  return (
+    <ThemeProvider color={dotColor} bgColor={bgColor}>
+      <PageLayout controlElements={controlArea} viewElements={viewArea} />
+    </ThemeProvider>
+  );
 }
 
 export default App;

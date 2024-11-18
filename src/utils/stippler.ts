@@ -1,11 +1,5 @@
-import { useState, useCallback, useEffect } from "react";
 import * as d3 from "d3";
 import * as THREE from "three";
-
-interface UseStipplerReturn {
-  points?: THREE.Vector2[];
-  relaxPoints?: () => void;
-}
 
 const getPixelData = (imageData: ImageData, x: number, y: number) => {
   const { data, width } = imageData;
@@ -37,10 +31,10 @@ const generateRandomPoints = (imageData: ImageData, n: number) => {
 const recalculatePoints = (imageData: ImageData, points: THREE.Vector2[]) => {
   // Next voronoi (relaxation)
   let delaunay = calculateDelaunay(points);
-  let voronoi = delaunay.voronoi([0, 0, imageData.width, imageData.height]);
+  // let voronoi = delaunay.voronoi([0, 0, imageData.width, imageData.height]);
   // Get latest polygons
-  let polygons = voronoi.cellPolygons();
-  let cells = Array.from(polygons);
+  // let polygons = voronoi.cellPolygons();
+  // let cells = Array.from(polygons);
 
   // Arrays for centroids and weights
   let centroids: THREE.Vector2[] = new Array(points.length)
@@ -99,32 +93,6 @@ function calculateDelaunay(points: THREE.Vector2[]) {
   return new d3.Delaunay(pointsArray);
 }
 
-const useStippler = (props: { imageData?: ImageData }): UseStipplerReturn => {
-  const { imageData: initialImageData } = props;
-
-  const [prevPoints, setPrevPoints] = useState<THREE.Vector2[]>();
-
-  useEffect(() => {
-    if (initialImageData) {
-      const points = generateRandomPoints(initialImageData, 20000);
-      setPrevPoints(points);
-    }
-  }, [initialImageData]);
-
-  //   const relaxPoints = useCallback(() => {
-  //     console.log("Relaxing points");
-  //     if (initialImageData && prevPoints) {
-  //       const points = recalculatePoints(initialImageData, prevPoints);
-  //       setPrevPoints(points);
-  //     }
-  //   }, [initialImageData, prevPoints, setPrevPoints]);
-
-  return {
-    points: prevPoints,
-    relaxPoints,
-  };
-};
-
 export const relaxPoints = (imageData: ImageData, points?: THREE.Vector2[]) => {
   console.log("Relaxing points");
   let stressedPoints = points;
@@ -134,5 +102,3 @@ export const relaxPoints = (imageData: ImageData, points?: THREE.Vector2[]) => {
   const relaxedPoints = recalculatePoints(imageData, stressedPoints);
   return relaxedPoints;
 };
-
-export default useStippler;
