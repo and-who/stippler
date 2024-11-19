@@ -13,9 +13,9 @@ const InfoPanel: React.FC = () => {
     <Container>
       <Layout>
         <h1>Stippler</h1>
-        <p>It stipples.</p>
+        <p>Weighted Voronoi Stippling. It stipples.</p>
         <p>
-          <a href="https://github.com/and-who">
+          <a href="https://github.com/and-who/stippler">
             <i>Author: Andreas Wolf</i>
           </a>
         </p>

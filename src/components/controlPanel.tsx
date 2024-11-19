@@ -1,7 +1,17 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import Container from "./container";
-import { invertColor } from "../utils/utils";
+import { cycleRGB, hexToRGB, invertColor, rgbToHex } from "../utils/utils";
+
+const colorPalette = [
+  "#FF00FF",
+  "#FFFF00",
+  "#00FFFF",
+  "#FFFF00",
+  "#FF0000",
+  "#00FF00",
+  "#0000FF",
+];
 
 interface ControlPanelProps {
   cycleCount: number;
@@ -30,16 +40,17 @@ const ControlPanel: React.FC<ControlPanelProps> = ({
   onCycleLimitChange,
   onDotCountChange,
 }) => {
-  const [dotColor, setDotColor] = useState("#FFC0CB");
-  const [dotSize, setDotSize] = useState(3);
+  const [dotColor, setDotColor] = useState("#FF00FF");
+  const [dotSize, setDotSize] = useState(4);
   const [cycleLimit, setCycleLimit] = useState(1000);
   const [renderCycleActive, setRenderCycleActive] = useState(true);
   const [dotCount, setDotCount] = useState(20000);
+  const [animationSpeed, setAnimationSpeed] = useState(0);
+  const previousTimeRef = React.useRef<number>();
 
-  const handleDotColorChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const color = e.target.value;
+  const handleDotColorChange = (color: string) => {
     const bgColor = invertColor(color);
-    setDotColor(e.target.value);
+    setDotColor(color);
     onDotColorChange({ color, bgColor });
   };
 
@@ -66,13 +77,66 @@ const ControlPanel: React.FC<ControlPanelProps> = ({
     setDotCount(dotCount);
   };
 
+  // Initialize the control panel with the initial values
   useEffect(() => {
-    onDotColorChange({ color: dotColor, bgColor: invertColor(dotColor) });
+    const randomColor =
+      colorPalette[Math.floor(Math.random() * colorPalette.length)];
+    setDotColor(randomColor);
+    onDotColorChange({ color: randomColor, bgColor: invertColor(randomColor) });
     onDotSizeChange(dotSize);
     onRenderCycleChange(renderCycleActive);
     onCycleLimitChange(cycleLimit);
     onDotCountChange(dotCount);
   }, []);
+
+  // RequestAnimation loop
+  useEffect(() => {
+    let frameId: number;
+    const colorAnimation = (time?: DOMHighResTimeStamp) => {
+      const deltaTime =
+        time && previousTimeRef.current ? time - previousTimeRef.current : 0;
+      console.log("colorAnimation", {
+        deltaTime,
+        time,
+        timeref: previousTimeRef.current,
+      });
+      if (animationSpeed > 0) {
+        if (!previousTimeRef.current) {
+          previousTimeRef.current = time;
+        }
+        if (deltaTime > 50) {
+          if (previousTimeRef.current != undefined && time) {
+            setDotColor((prevColor: string) => {
+              const prevRGBColor = hexToRGB(prevColor);
+              const nextRGBColor = cycleRGB(
+                prevRGBColor,
+                deltaTime * animationSpeed * 0.03
+              );
+              const nextHexColor = rgbToHex(nextRGBColor);
+              const bgColor = invertColor(nextHexColor);
+              console.log("setDotColor", {
+                nextHexColor,
+                prevColor,
+                prevRGBColor,
+                nextRGBColor,
+                deltaTime,
+              });
+              onDotColorChange({ color: nextHexColor, bgColor });
+              return nextHexColor;
+            });
+          }
+          previousTimeRef.current = time;
+        }
+        frameId = requestAnimationFrame(colorAnimation);
+      } else {
+        cancelAnimationFrame(frameId);
+      }
+    };
+    colorAnimation();
+    return () => {
+      cancelAnimationFrame(frameId);
+    };
+  }, [animationSpeed]);
 
   return (
     <Container title="Control Panel">
@@ -137,7 +201,24 @@ const ControlPanel: React.FC<ControlPanelProps> = ({
                 type="color"
                 id="dotColor"
                 value={dotColor}
-                onChange={handleDotColorChange}
+                onChange={(e) => handleDotColorChange(e.target.value)}
+              />
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <label htmlFor="animationSpeed">Color_Change_Speed:</label>
+            </td>
+            <td>
+              <input
+                id="animationSpeed"
+                type="range"
+                min={0}
+                max={100}
+                value={animationSpeed}
+                onChange={(event) =>
+                  setAnimationSpeed(Number(event.target.value))
+                }
               />
             </td>
           </tr>

@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import React from "react";
 import styled from "styled-components";
 import * as THREE from "three";
 
@@ -8,11 +8,12 @@ interface PointRendererProps {
   height: number;
   dotColor: string;
   dotSize: number;
+  canvasRef: React.RefObject<HTMLCanvasElement>;
 }
 
 const Layout = styled.div`
   display: flex;
-  height: 100vh;
+  height: 100%;
   width: 100%;
   align-items: center;
   justify-content: center;
@@ -29,9 +30,8 @@ const PointRenderer: React.FC<PointRendererProps> = ({
   height,
   dotColor,
   dotSize,
+  canvasRef,
 }) => {
-  const canvasRef = useRef<HTMLCanvasElement>(null);
-
   const canvas = canvasRef.current;
   if (canvas) {
     const context = canvas.getContext("2d");

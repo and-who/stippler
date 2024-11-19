@@ -9,12 +9,13 @@ import * as THREE from "three";
 import ControlPanel from "./components/controlPanel";
 import VerticalLayout from "./components/verticalLayout";
 import ThemeProvider from "./components/themeProvider";
-import testJPG from "./assets/test.jpg";
 import InfoPanel from "./components/infoPanel";
+import ExportPanel from "./components/exportPanel";
 
 function App() {
   const [image, setImage] = useState<HTMLImageElement>();
   const [imageData, setImageData] = useState<ImageData>();
+  const canvasRef = useRef<HTMLCanvasElement>(null);
   const [count, setCount] = useState<number>(0);
 
   const cycleLimitRef = useRef<number>();
@@ -58,8 +59,7 @@ function App() {
     }
   };
 
-  const animate = (time: DOMHighResTimeStamp) => {
-    console.log("animate", { time });
+  const animate = () => {
     if (
       renderCycleActiveRef.current &&
       cycleLimitRef.current &&
@@ -96,7 +96,6 @@ function App() {
       <VerticalLayout>
         <InfoPanel />
         <ImageLoader
-          initImageSource={testJPG}
           onChange={(imageElement: HTMLImageElement) => {
             setImage(imageElement);
           }}
@@ -126,6 +125,14 @@ function App() {
             pointsCountRef.current = dotCount;
           }}
         />
+        <ExportPanel
+          canvasRef={canvasRef}
+          pointsRef={pointsRef}
+          filename="stipple"
+          width={imageData?.width || 0}
+          height={imageData?.height || 0}
+          pointSize={dotSize}
+        />
       </VerticalLayout>
     </>
   );
@@ -134,6 +141,7 @@ function App() {
     <>
       {pointsRef.current && imageDataRef.current && (
         <PointRenderer
+          canvasRef={canvasRef}
           points={pointsRef.current}
           dotColor={dotColor}
           dotSize={dotSize}

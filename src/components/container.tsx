@@ -10,7 +10,7 @@ const Layout = styled.div<{ $hasTitle?: boolean }>`
   position: relative;
   margin: 5px;
   padding: 15px;
-  ${(props) => props.$hasTitle && "padding-top: 30px;"}
+  ${(props) => props.$hasTitle && "padding-top: 15px;"}
   ${(props) => props.$hasTitle && "margin-top: 15px;"}
   border: 2px dotted var(--color);
 `;

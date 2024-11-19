@@ -56,7 +56,7 @@ const ImageEditor: React.FC<ImageEditorProps> = ({ image, onImageChange }) => {
 
         var imageData = context.getImageData(0, 0, canvas.width, canvas.height);
 
-        // const rgbColor = getRGB(color);
+        // const rgbColor = hexToRGB(color);
         // const rMult = rgbColor.r / 255;
         // const gMult = rgbColor.g / 255;
         // const bMult = rgbColor.b / 255;
@@ -110,7 +110,6 @@ const ImageEditor: React.FC<ImageEditorProps> = ({ image, onImageChange }) => {
           <input
             type="checkbox"
             onChange={(event) => {
-              console.log(event.target.checked);
               setInvert(event.target.checked);
             }}
           />

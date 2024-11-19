@@ -1,8 +1,11 @@
 import React, { useEffect } from "react";
 import Container from "./container";
+import exampleImage1 from "../assets/examples/ex1.jpg";
+import exampleImage2 from "../assets/examples/ex2.jpg";
+
+const examples = [exampleImage1, exampleImage2];
 
 interface ImageLoaderProps {
-  initImageSource?: string;
   onChange: (image: HTMLImageElement) => void;
 }
 
@@ -23,13 +26,12 @@ const ImageLoader = (props: ImageLoaderProps) => {
   };
 
   useEffect(() => {
-    if (props.initImageSource) {
-      const img = new Image();
-      img.onload = () => {
-        props.onChange?.(img);
-      };
-      img.src = props.initImageSource;
-    }
+    const exampleImage = examples[Math.floor(Math.random() * examples.length)];
+    const img = new Image();
+    img.onload = () => {
+      props.onChange?.(img);
+    };
+    img.src = exampleImage;
   }, []);
 
   return (

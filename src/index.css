@@ -1,7 +1,8 @@
 :root {
   font-family: Courier, Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
-  line-height: 1.5;
+  line-height: 1.2;
   font-weight: 400;
+  font-size: 0.8em;
 
   color-scheme: light dark;
   color: rgba(255, 255, 255, 0.87);
@@ -47,6 +48,20 @@ button,
 input[type="file"]::-webkit-file-upload-button {
   cursor: pointer;
   font-family: Courier, Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+  color: var(--bgColor);
+  background-color: var(--color);
+  border: 2px solid transparent;
+  margin-right: 5px;
+  accent-color: var(--color);
+}
+
+input[type="file"]::-webkit-file-upload-button:hover {
+  border: 2px dashed var(--bgColor);
+}
+
+input:hover,
+button:hover {
+  border: 2px dashed var(--bgColor);
 }
 
 /* For Chrome, Safari, Opera, and Edge  */
