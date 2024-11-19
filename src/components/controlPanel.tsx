@@ -6,11 +6,16 @@ import { cycleRGB, hexToRGB, invertColor, rgbToHex } from "../utils/utils";
 const colorPalette = [
   "#FF00FF",
   "#FFFF00",
-  "#00FFFF",
-  "#FFFF00",
   "#FF0000",
   "#00FF00",
   "#0000FF",
+  "#505050",
+  "#9900FF",
+  "#0066FF",
+  "#FF0066",
+  "#6600FF",
+  "#000000",
+  "#000000",
 ];
 
 interface ControlPanelProps {
@@ -149,7 +154,7 @@ const ControlPanel: React.FC<ControlPanelProps> = ({
             <td>
               <span id="cycleCount">{cycleCount}</span>
               <button id="renderCycle" onClick={toggleRenderCycle}>
-                {renderCycleActive ? "⏸ Pause" : "▶ Render"}
+                {renderCycleActive ? "\u25A1 Pause" : "▶ Render"}
               </button>
             </td>
           </tr>
@@ -160,6 +165,7 @@ const ControlPanel: React.FC<ControlPanelProps> = ({
             <td>
               <input
                 type="number"
+                min={0}
                 id="cycleLimit"
                 value={cycleLimit}
                 onChange={handleCycleLimitChange}
@@ -174,6 +180,7 @@ const ControlPanel: React.FC<ControlPanelProps> = ({
               <input
                 type="number"
                 id="dotCount"
+                min={0}
                 value={dotCount}
                 onChange={handleDotCountChange}
               />
@@ -187,6 +194,7 @@ const ControlPanel: React.FC<ControlPanelProps> = ({
               <input
                 type="number"
                 id="dotSize"
+                min={0}
                 value={dotSize}
                 onChange={handleDotSizeChange}
               />
