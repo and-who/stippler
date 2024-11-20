@@ -47,10 +47,10 @@ const ControlPanel: React.FC<ControlPanelProps> = ({
 }) => {
   const [dotColor, setDotColor] = useState("#FF00FF");
   const [dotSize, setDotSize] = useState(4);
-  const [cycleLimit, setCycleLimit] = useState(1000);
+  const [cycleLimit, setCycleLimit] = useState(4000);
   const [renderCycleActive, setRenderCycleActive] = useState(true);
   const [dotCount, setDotCount] = useState(20000);
-  const [animationSpeed, setAnimationSpeed] = useState(0);
+  const [animationSpeed, setAnimationSpeed] = useState(2);
   const previousTimeRef = React.useRef<number>();
 
   const handleDotColorChange = (color: string) => {
@@ -222,7 +222,7 @@ const ControlPanel: React.FC<ControlPanelProps> = ({
                 id="animationSpeed"
                 type="range"
                 min={0}
-                max={100}
+                max={200}
                 value={animationSpeed}
                 onChange={(event) =>
                   setAnimationSpeed(Number(event.target.value))
