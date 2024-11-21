@@ -12,14 +12,17 @@ const MetaData: React.FC<{ color: string }> = (props) => {
         name="keywords"
         content="Stippler, Voronoi, Stippling, Weighted Voronoi, Weighted Voronoi Stippling"
       ></meta>
-      <meta name="og:title" content="Stippler - Weighted Voronoi Stippling" />
       <meta
-        name="og:description"
+        property="og:title"
+        content="Stippler - Weighted Voronoi Stippling"
+      />
+      <meta
+        property="og:description"
         content="Weighted Voronoi Stippling. It stipples."
       />
       <meta
-        name="og:image"
-        content="https://stippler.wolfandreas.com/public/screenshot.png"
+        property="og:image"
+        content="https://stippler.wolfandreas.com/screenshot.png"
       />
       <script type="application/ld+json">
         {`
@@ -28,7 +31,7 @@ const MetaData: React.FC<{ color: string }> = (props) => {
                         "@type": "WebSite",
                         "url": "https://stippler.wolfandreas.com/",
                         "name": "Stippler",
-                        "image": "https://stippler.wolfandreas.com/public/screenshot.png",
+                        "image": "https://stippler.wolfandreas.com/screenshot.png",
                         "abstract": "Weighted Voronoi Stippling. It stipples."
                     }
                 `}
