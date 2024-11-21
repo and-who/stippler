@@ -100,11 +100,6 @@ const ControlPanel: React.FC<ControlPanelProps> = ({
     const colorAnimation = (time?: DOMHighResTimeStamp) => {
       const deltaTime =
         time && previousTimeRef.current ? time - previousTimeRef.current : 0;
-      console.log("colorAnimation", {
-        deltaTime,
-        time,
-        timeref: previousTimeRef.current,
-      });
       if (animationSpeed > 0) {
         if (!previousTimeRef.current) {
           previousTimeRef.current = time;
@@ -119,13 +114,6 @@ const ControlPanel: React.FC<ControlPanelProps> = ({
               );
               const nextHexColor = rgbToHex(nextRGBColor);
               const bgColor = invertColor(nextHexColor);
-              console.log("setDotColor", {
-                nextHexColor,
-                prevColor,
-                prevRGBColor,
-                nextRGBColor,
-                deltaTime,
-              });
               onDotColorChange({ color: nextHexColor, bgColor });
               return nextHexColor;
             });
@@ -147,89 +135,91 @@ const ControlPanel: React.FC<ControlPanelProps> = ({
     <Container title="Control Panel">
       <Layout>
         <table>
-          <tr>
-            <td>
-              <label htmlFor="cycleCount">Cycle_Count: </label>
-            </td>
-            <td>
-              <span id="cycleCount">{cycleCount}</span>
-              <button id="renderCycle" onClick={toggleRenderCycle}>
-                {renderCycleActive ? "\u25A1 Pause" : "▶ Render"}
-              </button>
-            </td>
-          </tr>
-          <tr>
-            <td>
-              <label htmlFor="cycleLimit">Cycle_Limit: </label>
-            </td>
-            <td>
-              <input
-                type="number"
-                min={0}
-                id="cycleLimit"
-                value={cycleLimit}
-                onChange={handleCycleLimitChange}
-              />
-            </td>
-          </tr>
-          <tr>
-            <td>
-              <label htmlFor="dotCount">Dot_Count: </label>
-            </td>
-            <td>
-              <input
-                type="number"
-                id="dotCount"
-                min={0}
-                value={dotCount}
-                onChange={handleDotCountChange}
-              />
-            </td>
-          </tr>
-          <tr>
-            <td>
-              <label htmlFor="dotSize">Dot_Size: </label>
-            </td>
-            <td>
-              <input
-                type="number"
-                id="dotSize"
-                min={0}
-                value={dotSize}
-                onChange={handleDotSizeChange}
-              />
-            </td>
-          </tr>
-          <tr>
-            <td>
-              <label htmlFor="dotColor">Dot_Color: </label>
-            </td>
-            <td>
-              <input
-                type="color"
-                id="dotColor"
-                value={dotColor}
-                onChange={(e) => handleDotColorChange(e.target.value)}
-              />
-            </td>
-          </tr>
-          <tr>
-            <td>
-              <label htmlFor="animationSpeed">Color_Change_Speed:</label>
-            </td>
-            <td>
-              <input
-                id="animationSpeed"
-                type="range"
-                min={0}
-                max={200}
-                value={animationSpeed}
-                onChange={(event) =>
-                  setAnimationSpeed(Number(event.target.value))
-                }
-              />
-            </td>
-          </tr>
+          <tbody>
+            <tr>
+              <td>
+                <label htmlFor="cycleCount">Cycle_Count: </label>
+              </td>
+              <td>
+                <span id="cycleCount">{cycleCount}</span>
+                <button id="renderCycle" onClick={toggleRenderCycle}>
+                  {renderCycleActive ? "\u25A1 Pause" : "▶ Render"}
+                </button>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <label htmlFor="cycleLimit">Cycle_Limit: </label>
+              </td>
+              <td>
+                <input
+                  type="number"
+                  min={0}
+                  id="cycleLimit"
+                  value={cycleLimit}
+                  onChange={handleCycleLimitChange}
+                />
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <label htmlFor="dotCount">Dot_Count: </label>
+              </td>
+              <td>
+                <input
+                  type="number"
+                  id="dotCount"
+                  min={0}
+                  value={dotCount}
+                  onChange={handleDotCountChange}
+                />
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <label htmlFor="dotSize">Dot_Size: </label>
+              </td>
+              <td>
+                <input
+                  type="number"
+                  id="dotSize"
+                  min={0}
+                  value={dotSize}
+                  onChange={handleDotSizeChange}
+                />
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <label htmlFor="dotColor">Dot_Color: </label>
+              </td>
+              <td>
+                <input
+                  type="color"
+                  id="dotColor"
+                  value={dotColor}
+                  onChange={(e) => handleDotColorChange(e.target.value)}
+                />
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <label htmlFor="animationSpeed">Color_Change_Speed:</label>
+              </td>
+              <td>
+                <input
+                  id="animationSpeed"
+                  type="range"
+                  min={0}
+                  max={200}
+                  value={animationSpeed}
+                  onChange={(event) =>
+                    setAnimationSpeed(Number(event.target.value))
+                  }
+                />
+              </td>
+            </tr>
+          </tbody>
         </table>
       </Layout>
     </Container>

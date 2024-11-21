@@ -11,6 +11,7 @@ import VerticalLayout from "./components/verticalLayout";
 import ThemeProvider from "./components/themeProvider";
 import InfoPanel from "./components/infoPanel";
 import ExportPanel from "./components/exportPanel";
+import MetaData from "./components/metaData";
 
 function App() {
   const [image, setImage] = useState<HTMLImageElement>();
@@ -93,6 +94,7 @@ function App() {
 
   const controlArea = (
     <>
+      <MetaData color={bgColor} />
       <VerticalLayout>
         <InfoPanel />
         <ImageLoader

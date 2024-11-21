@@ -126,12 +126,10 @@ export const rgbToHex = (rgb: RGB) => {
 
 export const cycleRGB = (rgb: RGB, stepSize: number) => {
   const hsv = rgbToHsv(rgb);
-  console.log("cycleRGB", { hsv, stepSize });
 
   hsv.h = (((hsv.h + stepSize * 0.0001) * 10000) % 10000) / 10000;
   const newRGB = hsvToRgb(hsv);
 
-  console.log("cycleRGB", { hsv, stepSize });
   return newRGB;
 };
 
