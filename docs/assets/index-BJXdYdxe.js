@@ -92,6 +92,7 @@ Error generating stack: `+o.message+`
 
   @media (max-width: 1000px) {
     flex-basis: initial;
+    height: auto;
   }
 `,V_=Le.div`
   display: flex;

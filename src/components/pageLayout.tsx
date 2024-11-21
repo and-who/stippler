@@ -30,6 +30,7 @@ const ControlArea = styled.div`
 
   @media (max-width: 1000px) {
     flex-basis: initial;
+    height: auto;
   }
 `;
 
