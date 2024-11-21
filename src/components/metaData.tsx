@@ -12,6 +12,18 @@ const MetaData: React.FC<{ color: string }> = (props) => {
         name="keywords"
         content="Stippler, Voronoi, Stippling, Weighted Voronoi, Weighted Voronoi Stippling"
       ></meta>
+      <meta
+        property="og:title"
+        content="Stippler - Weighted Voronoi Stippling"
+      />
+      <meta
+        property="og:description"
+        content="Weighted Voronoi Stippling. It stipples."
+      />
+      <meta
+        property="og:image"
+        content="https://stippler.wolfandreas.com/public/screenshot.png"
+      />
       <script type="application/ld+json">
         {`
                     {
