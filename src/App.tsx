@@ -134,6 +134,7 @@ function App() {
           width={imageData?.width || 0}
           height={imageData?.height || 0}
           pointSize={dotSize}
+          backgroundColor={bgColor}
         />
       </VerticalLayout>
     </>

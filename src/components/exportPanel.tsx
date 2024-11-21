@@ -11,6 +11,7 @@ interface ExportPanelProps {
   width: number;
   height: number;
   pointSize: number;
+  backgroundColor: string;
 }
 
 const Layout = styled.div`
@@ -22,9 +23,16 @@ const Layout = styled.div`
 const downloadCanvasAsPng = (props: {
   filename?: string;
   canvasRef?: React.RefObject<HTMLCanvasElement>;
+  backgroundColor: string;
 }) => {
-  const { filename, canvasRef } = props;
+  const { filename, canvasRef, backgroundColor } = props;
   if (canvasRef?.current) {
+    const canvas = canvasRef.current;
+    var ctx = canvas.getContext("2d");
+    if (!ctx) return;
+    ctx.globalCompositeOperation = "destination-over";
+    ctx.fillStyle = backgroundColor;
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
     var link = document.createElement("a");
     link.download = `${filename}.png` || "stipple.png";
     link.href = canvasRef.current?.toDataURL();
@@ -58,13 +66,23 @@ const downloadPointsAsSvg = (props: {
 };
 
 const ExportPanel: React.FC<ExportPanelProps> = (props: ExportPanelProps) => {
-  const { canvasRef, pointsRef, filename, pointSize, width, height } = props;
+  const {
+    canvasRef,
+    pointsRef,
+    filename,
+    pointSize,
+    width,
+    height,
+    backgroundColor,
+  } = props;
   return (
     <Container title="Export">
       <Layout>
         <button
           disabled={!canvasRef?.current}
-          onClick={() => downloadCanvasAsPng({ canvasRef, filename })}
+          onClick={() =>
+            downloadCanvasAsPng({ canvasRef, filename, backgroundColor })
+          }
         >
           Export PNG
         </button>
